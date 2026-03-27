@@ -11,7 +11,7 @@ const Home = () => {
       <section 
         className="relative min-h-dvh flex items-center justify-start text-white px-6 md:px-12 lg:px-24"
         style={{
-          backgroundImage: `linear-gradient(to right, rgba(10, 25, 47, 0.95) 0%, rgba(10, 25, 47, 0.7) 40%, transparent 100%), url('https://images.unsplash.com/photo-1542314831-c6a4d14d8373?auto=format&fit=crop&q=80&w=1920')`,
+          backgroundImage: `linear-gradient(to right, rgba(10, 25, 47, 0.95) 0%, rgba(10, 25, 47, 0.7) 40%, transparent 100%), url('https://res.cloudinary.com/dm7sxhaeb/image/upload/v1774612031/sushuti-bali-2975787_1_hnrswl.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
