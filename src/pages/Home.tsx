@@ -71,7 +71,7 @@ const Home = () => {
           <div className="relative">
             <div className="aspect-[4/5] overflow-hidden">
               <img 
-                src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&q=80&w=1000" 
+                src="https://res.cloudinary.com/dm7sxhaeb/image/upload/v1774612031/sushuti-bali-2975787_1_hnrswl.jpg" 
                 alt="Urban Rest Interior" 
                 className="w-full h-full object-cover hover-zoom"
                 referrerPolicy="no-referrer"
