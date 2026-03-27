@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-brown: #4a3728;
+  --color-brand-gold: #c5a059;
+  --color-brand-beige: #f5f2ed;
+  --color-brand-charcoal: #2d2d2d;
+  
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-beige text-brand-charcoal font-sans antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+.glass-nav {
+  @apply bg-white/80 backdrop-blur-md border-b border-brand-brown/10;
+}
+
+.hover-zoom {
+  @apply transition-transform duration-500 hover:scale-105;
+}
+
+.text-gold {
+  @apply text-brand-gold;
+}
+
+.bg-gold {
+  @apply bg-brand-gold;
+}
+
+.btn-primary {
+  @apply bg-brand-brown text-white px-8 py-3 rounded-none transition-all duration-300 hover:bg-brand-gold hover:shadow-lg active:scale-95;
+}
+
+.btn-outline {
+  @apply border border-brand-brown text-brand-brown px-8 py-3 rounded-none transition-all duration-300 hover:bg-brand-brown hover:text-white active:scale-95;
+}
+
+.h-dvh {
+  height: 100dvh;
+}
+
+.min-h-dvh {
+  min-height: 100dvh;
+}

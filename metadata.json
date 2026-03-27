@@ -1,0 +1,7 @@
+{
+  "name": "Urban Rest Guesthouse",
+  "description": "Premium, modern, and affordable luxury accommodation in Mahikeng, South Africa.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
