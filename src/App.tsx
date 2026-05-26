@@ -18,6 +18,7 @@ import Gallery from './pages/Gallery';
 import Attractions from './pages/Attractions';
 import Booking from './pages/Booking';
 import Contact from './pages/Contact';
+import Spa from './pages/Spa';
 
 // Scroll to top on route change
 const ScrollToTop = () => {
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/attractions" element={<Attractions />} />
             <Route path="/book" element={<Booking />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/spa" element={<Spa />} />
           </Routes>
         </main>
         <Footer />

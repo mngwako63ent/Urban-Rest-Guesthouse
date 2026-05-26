@@ -1,100 +1,149 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { Check, Users, Wind, Tv, Refrigerator, Coffee, Wifi } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { ChevronLeft, ChevronRight, Star, Heart, Share, Users } from 'lucide-react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { ROOMS } from '../constants';
 
-const Accommodation = () => {
+const ImageSlider = ({ images, title }: { images: string[], title: string }) => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [hovered, setHovered] = useState(false);
+
+  const scrollPrev = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
   return (
-    <div className="pt-24">
-      {/* Header */}
-      <section className="py-24 px-6 md:px-12 bg-brand-beige text-center">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <span className="text-brand-gold uppercase tracking-[0.4em] text-sm font-bold">Our Rooms</span>
-          <h1 className="text-5xl md:text-6xl font-serif text-brand-brown">Luxury Living Spaces</h1>
-          <p className="text-gray-500 text-lg">
-            Choose from our selection of 15 premium units, each designed with your ultimate comfort in mind.
-          </p>
-        </div>
-      </section>
-
-      {/* Rooms List */}
-      <section className="py-24 px-6 md:px-12 bg-white">
-        <div className="max-w-7xl mx-auto space-y-32">
-          {ROOMS.map((room, index) => (
-            <motion.div 
-              key={room.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-20 items-center`}
-            >
-              <div className="w-full lg:w-1/2 relative group">
-                <div className="aspect-[16/10] overflow-hidden">
-                  <img 
-                    src={room.image} 
-                    alt={room.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 flex items-center gap-2">
-                  <Users size={16} className="text-brand-gold" />
-                  <span className="text-xs font-bold uppercase tracking-widest text-brand-brown">Up to {room.capacity} Guests</span>
-                </div>
-              </div>
-              
-              <div className="w-full lg:w-1/2 space-y-8">
-                <div className="space-y-4">
-                  <h2 className="text-4xl font-serif text-brand-brown">{room.title}</h2>
-                  <p className="text-gray-600 text-lg leading-relaxed">{room.description}</p>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4">
-                  {room.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <div className="w-5 h-5 rounded-full bg-brand-beige flex items-center justify-center">
-                        <Check size={12} className="text-brand-gold" />
-                      </div>
-                      <span className="text-sm text-gray-500">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="pt-6 flex items-center justify-between border-t border-gray-100">
-                  <div>
-                    <span className="text-xs uppercase tracking-widest text-gray-400 block mb-1">Starting from</span>
-                    <span className="text-3xl font-serif text-brand-brown">{room.price}</span>
-                    <span className="text-sm text-gray-400"> / night</span>
-                  </div>
-                  <Link to="/book" className="btn-primary">Book This Room</Link>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Standard Features */}
-      <section className="py-24 px-6 md:px-12 bg-brand-charcoal text-white">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 text-center">
-          {[
-            { icon: Wind, label: 'Air Conditioning' },
-            { icon: Tv, label: 'MultiChoice TV' },
-            { icon: Refrigerator, label: 'Bar Fridge' },
-            { icon: Coffee, label: 'Tea & Coffee' },
-            { icon: Wifi, label: 'Free High-Speed Wi-Fi' },
-          ].map((item, i) => (
-            <div key={i} className="space-y-4">
-              <div className="w-16 h-16 mx-auto rounded-full border border-gray-700 flex items-center justify-center text-brand-gold">
-                <item.icon size={28} />
-              </div>
-              <p className="text-xs uppercase tracking-widest font-semibold">{item.label}</p>
+    <div 
+      className="relative aspect-[4/3] rounded-2xl overflow-hidden group w-full"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <div className="overflow-hidden w-full h-full" ref={emblaRef}>
+        <div className="flex h-full">
+          {images.map((img, index) => (
+            <div key={index} className="relative flex-[0_0_100%] min-w-0 h-full">
+              <img 
+                src={img} 
+                alt={`${title} - image ${index + 1}`} 
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </div>
           ))}
         </div>
+      </div>
+
+      <AnimatePresence>
+        {hovered && images.length > 1 && (
+          <>
+            <motion.button
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              onClick={scrollPrev}
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-brand-charcoal shadow-sm transition-colors"
+            >
+              <ChevronLeft size={18} />
+            </motion.button>
+            <motion.button
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 10 }}
+              onClick={scrollNext}
+              className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-brand-charcoal shadow-sm transition-colors"
+            >
+              <ChevronRight size={18} />
+            </motion.button>
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {images.map((_, i) => (
+                <div key={i} className="w-1.5 h-1.5 rounded-full bg-white/60" />
+              ))}
+            </div>
+          </>
+        )}
+      </AnimatePresence>
+      <button className="absolute top-3 right-3 p-2 text-white hover:scale-110 transition-transform active:scale-95">
+         <Heart size={24} className="drop-shadow-md" />
+      </button>
+    </div>
+  );
+};
+
+const Accommodation = () => {
+  return (
+    <div className="pt-24 bg-white min-h-screen">
+      {/* Header */}
+      <section className="pt-12 pb-8 px-6 md:px-12 max-w-7xl mx-auto">
+        <h1 className="text-4xl md:text-5xl font-serif text-brand-charcoal mb-4">Select your room</h1>
+        <p className="text-gray-500 text-lg">
+          Comfortable, modern, and perfectly suited for your stay in Mahikeng.
+        </p>
       </section>
+
+      {/* Rooms List */}
+      <section className="pb-24 px-6 md:px-12 max-w-7xl mx-auto space-y-16">
+        {ROOMS.map((room, index) => (
+          <motion.div 
+            key={room.id}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col lg:flex-row gap-8 items-start pt-8 border-t border-gray-100 first:border-0 first:pt-0"
+          >
+            <div className="w-full lg:w-[45%] shrink-0">
+               <ImageSlider images={room.images || [room.image]} title={room.title} />
+            </div>
+            
+            <div className="w-full lg:w-[55%] flex flex-col h-full py-2">
+              <div className="flex justify-between items-start mb-2">
+                 <div className="space-y-1">
+                    <p className="text-sm text-gray-500">Entire room · {room.capacity} guests</p>
+                    <h2 className="text-3xl font-serif text-brand-charcoal">{room.title}</h2>
+                 </div>
+                 <div className="flex items-center gap-1 text-brand-charcoal">
+                    <Star size={16} className="fill-brand-charcoal" />
+                    <span className="font-semibold text-lg">4.96</span>
+                 </div>
+              </div>
+              
+              <div className="w-8 h-[1px] bg-gray-200 my-4" />
+              
+              <p className="text-gray-600 leading-relaxed mb-6">
+                 {room.description}
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-4 mb-8">
+                 {room.features.slice(0, 6).map((feature, i) => (
+                   <span key={i} className="text-gray-600 text-sm flex items-center gap-2">
+                     <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                     {feature}
+                   </span>
+                 ))}
+                 {room.features.length > 6 && (
+                   <span className="text-brand-charcoal font-medium text-sm underline cursor-pointer">Show more amenities</span>
+                 )}
+              </div>
+              
+              <div className="mt-auto flex items-end justify-between pt-6 border-t border-gray-100">
+                <div>
+                  <span className="text-2xl font-semibold text-brand-charcoal">{room.price}</span>
+                  <span className="text-gray-500"> / night</span>
+                </div>
+                <Link to="/book" className="btn-primary rounded-xl px-8">Reserve</Link>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </section>
+
     </div>
   );
 };
